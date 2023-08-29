@@ -1,9 +1,9 @@
 class ArticleItem {
-  String author;
+  String? author;
   String title;
   String description;
   String url;
-  String urlToImage;
+  String? urlToImage;
   DateTime publishedAt;
   String content;
 
