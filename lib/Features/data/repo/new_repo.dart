@@ -17,6 +17,7 @@ class NewsRepo with Parser {
     if (res.$1 != null) {
       return (res.$1, null);
     }
+
     Article article = Article.fromJson(res.$2 ?? {});
     return (null, article);
   }

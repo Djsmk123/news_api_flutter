@@ -42,9 +42,11 @@ class NetworkServiceImpl extends NetworkService with Parser {
       Map<String, String>? query}) async {
     if (await isConnected) {
       headers ??= apiInfo.defaultHeader;
-      final uri = Uri.parse(_buildUrl(endpoint));
+      var uri = Uri.parse(_buildUrl(endpoint));
+      if (query != null) {
+        uri = uri.replace(queryParameters: query);
+      }
       final response = await http.get(uri, headers: headers);
-      print(response.body.toString());
       return _processResponse(response);
     }
     return (const InternetConnectionFailure(), null);
@@ -77,9 +79,11 @@ class NetworkServiceImpl extends NetworkService with Parser {
   (Failure?, Map<String, dynamic>?) _processResponse(http.Response response) {
     if (response.statusCode == 200) {
       final decodedResponse = stringToJson(response.body.toString());
+
       if (decodedResponse.$1 != null) {
         return (decodedResponse.$1, null);
       }
+      return (null, decodedResponse.$2);
     }
     return (const EndpointFailure(), null);
   }
